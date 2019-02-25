@@ -1,0 +1,858 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>美多商城-商品列表</title>
+	<link rel="stylesheet" type="text/css" href="/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="js/host.js"></script>
+	<script type="text/javascript" src="js/vue-2.5.16.js"></script>
+	<script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到美多商城!</div>
+			<div class="fr">
+				<div v-if="username" class="login_btn fl">
+					欢迎您：<em>[[ username ]]</em>
+					<span>|</span>
+					<a @click="logout">退出</a>
+				</div>
+				<div v-else class="login_btn fl">
+					<a href="login.html">登录</a>
+					<span>|</span>
+					<a href="register.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="user_center_info.html">用户中心</a>
+					<span>|</span>
+					<a href="cart.html">我的购物车</a>
+					<span>|</span>
+					<a href="user_center_order.html">我的订单</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="images/logo.png"></a>
+		<div class="search_wrap fl">
+			<form method="get" action="/search.html" class="search_con">
+				<input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+				<input type="button" class="input_btn fr" name="" value="搜索">
+			</form>
+			<ul class="search_suggest fl">
+				<li><a href="#">索尼微单</a></li>
+				<li><a href="#">优惠15元</a></li>
+				<li><a href="#">美妆个护</a></li>
+				<li><a href="#">买2免1</a></li>
+			</ul>
+		</div>
+
+		<div @mouseenter="get_cart()" class="guest_cart fr">
+			<a href="#" class="cart_name fl">我的购物车</a>
+			<div class="goods_count fl" id="show_count">[[cart_total_count]]</div>
+
+			<ul class="cart_goods_show">
+				<li v-for="sku in cart">
+					<img :src="sku.default_image_url" alt="商品图片">
+					<h4>[[sku.name]]</h4>
+					<div>[[sku.count]]</div>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+
+	<div class="navbar_con">
+		<div class="navbar">
+			<div class="sub_menu_con fl">
+				<h1 class="fl">商品分类</h1>
+				<ul class="sub_menu">
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://shouji.jd.com">手机</a>
+							
+							<a href="http://www.itcast.cn">相机</a>
+							
+							<a href="http://www.itcast.cn">数码</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">手机通讯 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">手机配件 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">摄影摄像 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">数码配件 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">影音娱乐 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">智能设备 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">电子教育 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">电脑</a>
+							
+							<a href="http://www.itcast.cn">办公</a>
+							
+							<a href="http://www.itcast.cn">家用电器</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">电脑整机 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">电脑配件 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">外设产品 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">办公设备 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">文具耗材 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">空调 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">洗衣机 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">冰箱 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">生活电器 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">家居</a>
+							
+							<a href="http://www.itcast.cn">家具</a>
+							
+							<a href="http://www.itcast.cn">家装</a>
+							
+							<a href="http://www.itcast.cn">厨具</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">生活日用 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">家纺 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">灯具 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">家具 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">家装软饰 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">家装主材 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">五金电工 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">厨具 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">厨房卫浴 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">男装</a>
+							
+							<a href="http://www.itcast.cn">女装</a>
+							
+							<a href="http://www.itcast.cn">童装</a>
+							
+							<a href="http://www.itcast.cn">内衣</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">男装 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">女装 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">童装 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">童鞋 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">内衣 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">配饰 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">女鞋</a>
+							
+							<a href="http://www.itcast.cn">箱包</a>
+							
+							<a href="http://www.itcast.cn">钟表</a>
+							
+							<a href="http://www.itcast.cn">珠宝</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">时尚女鞋 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">潮流女包 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">精品男包 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">功能箱包 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">钟表 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">珠宝首饰 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">男鞋</a>
+							
+							<a href="http://www.itcast.cn">运动</a>
+							
+							<a href="http://www.itcast.cn">户外</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">流行男鞋 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">运动鞋包 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">运动服饰 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">健身训练 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">骑行运动 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">体育用品 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">户外鞋服 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">户外装备 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">房产</a>
+							
+							<a href="http://www.itcast.cn">汽车</a>
+							
+							<a href="http://www.itcast.cn">汽车用品</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">房产 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">汽车车型 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">维修保养 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">汽车装饰 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">车载电器 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">安全自驾 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">母婴</a>
+							
+							<a href="http://www.itcast.cn">玩具乐器</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">奶粉 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">营养辅食 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">尿裤湿斤 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">玩具 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">乐器 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">食品</a>
+							
+							<a href="http://www.itcast.cn">酒类</a>
+							
+							<a href="http://www.itcast.cn">生鲜</a>
+							
+							<a href="http://www.itcast.cn">特产</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">新鲜水果 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">蔬菜蛋品 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">精选肉类 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">中外名酒 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">海鲜水产 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">冷饮冻食 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">地方特产 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">图书</a>
+							
+							<a href="http://www.itcast.cn">音像</a>
+							
+							<a href="http://www.itcast.cn">电子书</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">少儿 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">教育 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">文艺 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">科技 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">音像 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">电子书 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+					<li>
+						<div class="level1">
+							
+							<a href="http://www.itcast.cn">机票</a>
+							
+							<a href="http://www.itcast.cn">酒店</a>
+							
+							<a href="http://www.itcast.cn">旅游</a>
+							
+							<a href="http://www.itcast.cn">生活</a>
+							
+						</div>
+						<div class="level2">
+							
+							<div class="list_group">
+								<div class="group_name fl">交通出行 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">酒店预订 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">旅游度假 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">演出票务 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">生活缴费 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+							<div class="list_group">
+								<div class="group_name fl">生活服务 &gt;</div>
+								<div class="group_detail fl">
+									
+								</div>
+							</div>
+							
+						</div>
+					</li>
+					
+				</ul>
+			</div>
+
+
+			<ul class="navlist fl">
+				<li><a href="">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">真划算</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a :href="cat1.url">[[cat1.category.name]]</a>
+		<span>></span>
+		<span>[[cat2.name]]</span>
+		<span>></span>
+		<a href="#">[[cat3.name]]</a>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>热销排行</h3>
+				<ul>
+					<li>
+						<a href="#"><img src="/images/goods/goods001.jpg"></a>
+						<h4><a href="#">360手机 N6 Pro 全网通 6GB+128GB 极夜黑</a></h4>
+						<div class="prize">￥3.90</div>
+					</li>
+					<li>
+						<a href="#"><img src="/images/goods/goods002.jpg"></a>
+						<h4><a href="#">360手机 N6 Pro 全网通 6GB+128GB 极夜黑</a></h4>
+						<div class="prize">￥16.80</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a @click="on_sort('-create_time')" :class="ordering=='-create_time'?'active':''">默认</a>
+				<a @click="on_sort('price')" :class="ordering=='price'?'active':''">价格</a>
+				<a @click="on_sort('sales')" :class="ordering=='sales'?'active':''">人气</a>
+			</div>
+
+			<ul class="goods_type_list clearfix">
+				<li v-for="sku in skus">
+					<a :href="sku.url"><img :src="sku.default_image_url"></a>
+					<h4><a :href="sku.url">[[sku.name]]</a></h4>
+					<div class="operate">
+						<span class="prize">￥[[sku.price]]</span>
+						<span>[[sku.comments]]评价</span>
+					</div>
+				</li>
+			</ul>
+            <!--<div v-if="skus.length==0"><p>暂时没有商品。</p></div>-->
+
+			<div class="pagenation">
+				<a v-show="previous" @click="on_page(previous)">上一页</a>
+				<a v-for="num in page_nums" @click="on_page(num)" :class="num==page?'active':''">[[num]]</a>
+				<a v-show="next" @click="on_page(next)">下一页></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>
+		</div>
+		<p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	</div>
+	<script type="text/javascript" src="js/list.js"></script>
+</body>
+</html>
